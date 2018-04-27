@@ -8,6 +8,13 @@ body {
   overflow-x: hidden;
 }
 
+#map {
+  height: 500px;
+  overflow: visible;
+
+}
+
+
 #wrapper {
   padding-left: 0;
   -webkit-transition: all 0.5s ease;

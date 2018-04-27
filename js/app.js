@@ -48,6 +48,17 @@ var ViewModel = function() {
 		self.universityList.push( new University(university) );
 	});
 
+
+    var map;
+                
+}
+
+function initMap() {
+    // Constructor creates a new map - only center and zoom are required.
+    map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 19.373, lng: -99.131},
+    zoom: 4
+    });
 }
 
 ko.applyBindings(new ViewModel());
