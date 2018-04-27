@@ -62,10 +62,13 @@ body {
   list-style: none;
 }
 
+/* The names were too long for the way the styling was originally set up, that's what it's commented out */
+/*
 .sidebar-nav li {
   text-indent: 20px;
   line-height: 40px;
 }
+*/
 
 .sidebar-nav li a {
   display: block;
@@ -83,11 +86,14 @@ body {
   text-decoration: none;
 }
 
-.sidebar-nav>.sidebar-brand {
+/* The names were too long for the way the styling was originally set up, that's what it's commented out */
+/*.sidebar-nav>.sidebar-brand {
   height: 65px;
   font-size: 18px;
   line-height: 60px;
+  text-align: left;
 }
+*/
 
 .sidebar-nav>.sidebar-brand a {
   color: #999999;
