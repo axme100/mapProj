@@ -9,7 +9,7 @@ body {
 }
 
 #map {
-  height: 500px;
+  min-height: 80vh;
   overflow: visible;
 
 }
