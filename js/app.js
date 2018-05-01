@@ -104,6 +104,7 @@ function initMap() {
 		var infowindow = new google.maps.InfoWindow({
           content: title
         });
+        infoWindowObjects.push(infowindow);
 
 		// Utilize closures so that an event listener get's placed
 		// on each marker/info window
