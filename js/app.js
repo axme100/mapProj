@@ -4,16 +4,20 @@ var initialUniversities = [
 		acronym : 'UNAM-CU',
 		city : 'Ciudad de México',
 		state: 'Ciudad de México',
-		url: 'http://www.posgrado.unam.mx/es/convocatorias/vigentes'
+		url: 'http://www.posgrado.unam.mx/es/convocatorias/vigentes',
+		visible: true,
+		location: {lat: 19.332886, lng: -99.187956}
 
 	},
 
 	{
-		name: 'Universidad Iberoamericana',
+		name: 'Universidad Iberoamericana (Sante Fe)',
 		acronym : 'La Ibero',
 		city : 'Ciudad de México',
 		state: 'Ciudad de México',
-		url: 'http://posgrados.ibero.mx/contenido.php?cont=397'
+		url: 'http://posgrados.ibero.mx/contenido.php?cont=397',
+		visible: true,
+		location: {lat: 19.370168, lng: -99.264199}
 
 	},
 
@@ -22,18 +26,28 @@ var initialUniversities = [
 		acronym : 'UDLAP-Puebla',
 		city : 'Puebla',
 		state: 'Puebla',
-		url: 'http://www.udlap.mx/posgrados/'
+		visible: true,
+		location: {lat: 19.054410, lng: -98.283289}
 
 	},
 
 	]
 
 var University = function(data) {
+	// When creating all of the university objects,
+	// It seems like the only one that needs to be 
+	// a ko.observable is "visible", because it's the one
+	// that is going to change, all the other locations
+	// Are going to be hard coded.....?
+	// Or should it be anyway, since it needs to be
+	//data-binded to the html file.
 	this.name = ko.observable(data.name);
 	this.acronym = ko.observable(data.acronym);
 	this.city = ko.observable(data.city);
 	this.state = ko.observable(data.state);
 	this.url = ko.observable(data.url);
+	this.location = ko.observable(data.location);
+	this.visible = ko.observable(data.visible);
 }
 
 
@@ -48,10 +62,10 @@ var ViewModel = function() {
 		self.universityList.push( new University(university) );
 	});
 
-
-    var map;
-                
+    var map;           
 }
+
+
 
 function initMap() {
     // Constructor creates a new map - only center and zoom are required.
@@ -59,6 +73,56 @@ function initMap() {
     center: {lat: 19.373, lng: -99.131},
     zoom: 4
     });
-}
 
-ko.applyBindings(new ViewModel());
+    // Make an empty array of marker objects
+    this.markerObjects = ko.observableArray([])
+    
+    // Make an empty array of InfoWindow Objects
+    
+    this.infoWindowObjects = ko.observableArray([])
+
+    console.log(my.viewModel.universityList)
+
+    // Go throught the university list and add a marker
+    // for each of the locations and names in the title
+    for (var i = 0; i < my.viewModel.universityList().length; i++) {
+		// When I made the object
+		var position = my.viewModel.universityList()[i].location();
+		console.log(position)
+		
+		var title = my.viewModel.universityList()[i].name();
+		console.log("Printing the title object:")
+		console.log(title)
+
+		var marker = new google.maps.Marker({
+		position: position,
+		map: map,
+		title: title
+		});
+		markerObjects.push(marker);
+
+		var infowindow = new google.maps.InfoWindow({
+          content: title
+        });
+
+		// Utilize closures so that an event listener get's placed
+		// on each marker/info window
+		// I don't REALLY understand what's going on here
+		// at this point, I pretty much just adapted
+		// the solution that is happening here:\
+		// https://classroom.udacity.com/nanodegrees/nd004/parts/135b6edc-f1cd-4cd9-b831-1908ede75737/modules/bb387669-2b0b-4b27-ba08-5219101b23aa/lessons/3417188540/concepts/34803486710923
+        marker.addListener('click', (function(markerCopy) {
+          return function() {
+          	infowindow.open(map, markerCopy);
+          };
+        })(marker));
+	}
+};
+
+
+  
+// I'm creating an instance of my view model called my so 
+// that I can reference data in the vidw model, for example,
+// see the following post: https://stackoverflow.com/questions/46943988/how-can-i-access-an-observable-outside-the-viewmodel-in-knockoutjs?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+my = { viewModel: new ViewModel() };
+ko.applyBindings(my.viewModel);
