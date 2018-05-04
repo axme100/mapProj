@@ -31,6 +31,26 @@ var initialUniversities = [
 
 	},
 
+	{
+		name: 'Universidad Autónoma de Ciudad Juárez',
+		acronym : 'UACJ',
+		city : 'Ciudad Juárez',
+		state: 'Chihuahua',
+		visible: true,
+		location: {lat: 31.749082, lng: -106.446121}
+
+	},
+
+	{
+		name: 'Universidad de Quintana Roo',
+		acronym : 'UACJ',
+		city : 'Chetumal',
+		state: 'Quintana Roo',
+		visible: true,
+		location: {lat: 18.525784, lng: -88.270801}
+
+	}
+
 	]
 
 var University = function(data) {
@@ -112,11 +132,16 @@ function initMap() {
 		// at this point, I pretty much just adapted
 		// the solution that is happening here:\
 		// https://classroom.udacity.com/nanodegrees/nd004/parts/135b6edc-f1cd-4cd9-b831-1908ede75737/modules/bb387669-2b0b-4b27-ba08-5219101b23aa/lessons/3417188540/concepts/34803486710923
-        marker.addListener('click', (function(markerCopy) {
-          return function() {
-          	infowindow.open(map, markerCopy);
-          };
-        })(marker));
+        //marker.addListener('click', (function(markerCopy) {
+        //  return function() {
+        //  	infowindow.open(map, markerCopy);
+        //  };
+        //})(marker));
+		google.maps.event.addListener(marker,'click', (function(marker,infowindow){ 
+    		return function() {
+        		infowindow.open(map,marker);
+    		};
+		})(marker,infowindow));
 	}
 };
 
