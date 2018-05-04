@@ -62,7 +62,7 @@ body {
 
 .sidebar-nav {
   position: absolute;
-  top: 0;
+  top: 100px;
   width: 250px;
   margin: 0;
   padding: 0;
