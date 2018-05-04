@@ -82,7 +82,20 @@ var ViewModel = function() {
 		self.universityList.push( new University(university) );
 	});
 
-    var map;           
+	//Maybe change to self
+	this.uniqueCities = ko.computed(function() {
+        var myUniqueCities = [];
+        console.log(myUniqueCities);
+        for (var i = 0; i < this.universityList().length; i++) {
+        	var theCity = self.universityList()[i].city();
+        	if (myUniqueCities.indexOf(theCity) == -1) {
+        		myUniqueCities.push(theCity)
+        	}
+        }
+        console.log(myUniqueCities);
+        return myUniqueCities;
+    }, this);
+        
 }
 
 
