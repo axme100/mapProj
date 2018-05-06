@@ -5,7 +5,9 @@
 // universidad and de when it does the filtering or
 // Somehow searches for a substring that is an exact match of what the user enters and
 // maybe it will prioritize this
-
+// Things to add in the future:
+// 1) Ignore caps when doing the sorting
+// 2) Ignore accent marks because a lot of people won't be typine them.
 ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	this.sort(function(obj1) {
 		if (obj1.name == customFilter || obj1.name().indexOf(customFilter) != -1) 
@@ -126,28 +128,25 @@ var ViewModel = function() {
 function initMap() {
     // Constructor creates a new map - only center and zoom are required.
     map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 19.373, lng: -99.131},
-    zoom: 4
+    // These can be deleted because I'm now extending the edge of the map ot all of the
+    // markers
+    //center: {lat: 19.373, lng: -99.131},
+    //zoom: 4
     });
 
     // Make an empty array of marker objects
     this.markerObjects = ko.observableArray([])
     
     // Make an empty array of InfoWindow Objects
-    
     this.infoWindowObjects = ko.observableArray([])
 
-    
 
     // Go throught the university list and add a marker
     // for each of the locations and names in the title
     for (var i = 0; i < my.viewModel.universityList().length; i++) {
 		// When I made the object
 		var position = my.viewModel.universityList()[i].location();
-		
-		
 		var title = my.viewModel.universityList()[i].name();
-		
 
 		var marker = new google.maps.Marker({
 		position: position,
@@ -178,16 +177,18 @@ function initMap() {
     		};
 		})(marker,infowindow));
 	}
+
+	// Center the map to fit the bounds of all of the markers
+	var bounds = new google.maps.LatLngBounds();
+	for (var i = 0; i < this.markerObjects().length; i++) {
+	bounds.extend(markerObjects()[i].getPosition());
+	}
+
+	map.fitBounds(bounds);
 };
 
 function filterList(formElement) {
-	console.log("filterList function Called!!!!!!");
-	console.log(my.viewModel.userFilter());
-	console.log(my.viewModel.userCity());
 	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
-
-
-
 };
 
 // I'm creating an instance of my view model called my so 
