@@ -85,16 +85,18 @@ var ViewModel = function() {
 	//Maybe change to self
 	this.uniqueCities = ko.computed(function() {
         var myUniqueCities = [];
-        console.log(myUniqueCities);
         for (var i = 0; i < this.universityList().length; i++) {
         	var theCity = self.universityList()[i].city();
         	if (myUniqueCities.indexOf(theCity) == -1) {
         		myUniqueCities.push(theCity)
         	}
         }
-        console.log(myUniqueCities);
+        
         return myUniqueCities;
     }, this);
+
+    this.userFilter = ko.observable("");
+    this.userCity = ko.observable("");
         
 }
 
@@ -114,18 +116,17 @@ function initMap() {
     
     this.infoWindowObjects = ko.observableArray([])
 
-    console.log(my.viewModel.universityList)
+    
 
     // Go throught the university list and add a marker
     // for each of the locations and names in the title
     for (var i = 0; i < my.viewModel.universityList().length; i++) {
 		// When I made the object
 		var position = my.viewModel.universityList()[i].location();
-		console.log(position)
+		
 		
 		var title = my.viewModel.universityList()[i].name();
-		console.log("Printing the title object:")
-		console.log(title)
+		
 
 		var marker = new google.maps.Marker({
 		position: position,
@@ -156,6 +157,12 @@ function initMap() {
     		};
 		})(marker,infowindow));
 	}
+};
+
+function filterList(formElement) {
+	console.log("filterList function Called!!!!!!");
+	console.log(my.viewModel.userFilter());
+	console.log(my.viewModel.userCity());
 };
 
 

@@ -24,11 +24,12 @@
 
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
-            <form>
-                <input type="text"> </input>
-                <select data-bind="foreach: uniqueCities">
-                    <option data-bind="text: $data"> </option>
-                </select>
+            <form data-bind="submit: filterList">
+                <input data-bind="value: userFilter" type="text"> </input>
+                <select data-bind="options: uniqueCities,
+                       optionsCaption: 'Specify a city...',
+                       value: userCity,
+                       valueAllowUnset: true"></select>
                 <input type="submit"> </input>
             </form>
             <br>
