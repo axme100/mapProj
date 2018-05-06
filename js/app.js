@@ -1,5 +1,11 @@
 // What I'm trying to do here is extend the observable array to add custom sorting based on a value inputted by the user
 // Esentially, I followed this blog post and adapted it to my needs: https://www.strathweb.com/2012/07/knockout-js-pro-tips-working-with-observable-arrays/
+
+// So I thinkw what I need to do is modify this so that it ignores function words like
+// universidad and de when it does the filtering or
+// Somehow searches for a substring that is an exact match of what the user enters and
+// maybe it will prioritize this
+
 ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	this.sort(function(obj1) {
 		if (obj1.name == customFilter) 
@@ -184,8 +190,6 @@ function filterList(formElement) {
 
 };
 
-
-  
 // I'm creating an instance of my view model called my so 
 // that I can reference data in the vidw model, for example,
 // see the following post: https://stackoverflow.com/questions/46943988/how-can-i-access-an-observable-outside-the-viewmodel-in-knockoutjs?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
