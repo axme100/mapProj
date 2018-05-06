@@ -1,3 +1,17 @@
+// What I'm trying to do here is extend the observable array to add custom sorting based on a value inputted by the user
+// Esentially, I followed this blog post and adapted it to my needs: https://www.strathweb.com/2012/07/knockout-js-pro-tips-working-with-observable-arrays/
+ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
+	this.sort(function(obj1) {
+		if (obj1.name == customFilter) 
+			return 0;
+		else if (obj1.name < customFilter) 
+			return -1 ;
+		else 
+			return 1;
+	});
+}
+
+
 var initialUniversities = [
 	{
 		name: 'Universidad Nacional Autónoma de México (CU)',
@@ -97,6 +111,7 @@ var ViewModel = function() {
 
     this.userFilter = ko.observable("");
     this.userCity = ko.observable("");
+
         
 }
 
@@ -163,6 +178,10 @@ function filterList(formElement) {
 	console.log("filterList function Called!!!!!!");
 	console.log(my.viewModel.userFilter());
 	console.log(my.viewModel.userCity());
+	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
+
+
+
 };
 
 
