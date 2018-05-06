@@ -19,7 +19,6 @@ ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	});
 }
 
-
 var initialUniversities = [
 	{
 		name: 'Universidad Nacional Autónoma de México (CU)',
@@ -179,6 +178,7 @@ function initMap() {
 	}
 
 	// Center the map to fit the bounds of all of the markers
+	//https://stackoverflow.com/questions/19304574/center-set-zoom-of-map-to-cover-all-visible-markers?rq=1&utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 	var bounds = new google.maps.LatLngBounds();
 	for (var i = 0; i < this.markerObjects().length; i++) {
 	bounds.extend(markerObjects()[i].getPosition());
@@ -189,6 +189,15 @@ function initMap() {
 
 function filterList(formElement) {
 	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
+};
+
+function highlightUniversity(university) {
+	map.setCenter(university.location());
+	console.log(markerObjects());
+	console.log(markerObjects()[university.name]);//.setAnimation(google.maps.Animation.DROP);
+	map.setZoom(8);
+	//makerObjects()[university.name].setAnimation(google.maps.Animation.DROP);
+
 };
 
 // I'm creating an instance of my view model called my so 
