@@ -8,7 +8,7 @@
 
 ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	this.sort(function(obj1) {
-		if (obj1.name == customFilter) 
+		if (obj1.name == customFilter || obj1.name().indexOf(customFilter) != -1) 
 			return 0;
 		else if (obj1.name < customFilter) 
 			return -1 ;
