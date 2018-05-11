@@ -1,13 +1,7 @@
-// What I'm trying to do here is extend the observable array to add custom sorting based on a value inputted by the user
-// Esentially, I followed this blog post and adapted it to my needs: https://www.strathweb.com/2012/07/knockout-js-pro-tips-working-with-observable-arrays/
-
-// So I thinkw what I need to do is modify this so that it ignores function words like
-// universidad and de when it does the filtering or
-// Somehow searches for a substring that is an exact match of what the user enters and
-// maybe it will prioritize this
-// Things to add in the future:
-// 1) Ignore caps when doing the sorting
-// 2) Ignore accent marks because a lot of people won't be typine them.
+// Extend the observable array to add custom sorting:
+// Credit owed to this blog: https://www.strathweb.com/2012/07/knockout-js-pro-tips-working-with-observable-arrays/
+// TODO: Ignore caps when doing the sorting
+// TODO: Ignore accent marks because a lot of people won't be able to type them
 ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	this.sort(function(obj1) {
 		if (obj1.name == customFilter || obj1.name().indexOf(customFilter) != -1) 
@@ -27,6 +21,8 @@ ko.observableArray.fn.sortByVisible = function() {
 			return 1;
 	});
 }
+
+/* Model */
 
 var initialUniversities = [
 	{
@@ -110,6 +106,8 @@ var University = function(data) {
 }
 
 
+/* View Model */
+
 var ViewModel = function() {
 	var self = this;
 
@@ -148,7 +146,7 @@ var ViewModel = function() {
         
 }
 
-
+/* View */
 
 function initMap() {
     // Constructor creates a new map - only center and zoom are required.
