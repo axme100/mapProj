@@ -21,6 +21,7 @@ ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 
 var initialUniversities = [
 	{
+		index: 0,
 		name: 'Universidad Nacional Autónoma de México',
 		acronym : 'UNAM-CU',
 		city : 'Ciudad de México',
@@ -32,6 +33,7 @@ var initialUniversities = [
 	},
 
 	{
+		index: 1,
 		name: 'Universidad Iberoamericana Ciudad de México',
 		acronym : 'La Ibero',
 		city : 'Ciudad de México',
@@ -43,6 +45,7 @@ var initialUniversities = [
 	},
 
 	{
+		index: 2,
 		name: 'Universidad de las Américas Puebla',
 		acronym : 'UDLAP-Puebla',
 		city : 'Puebla',
@@ -54,6 +57,7 @@ var initialUniversities = [
 	},
 
 	{
+		index: 3,
 		name: 'Universidad Autónoma de Ciudad Juárez',
 		acronym : 'UACJ',
 		city : 'Ciudad Juárez',
@@ -65,6 +69,7 @@ var initialUniversities = [
 	},
 
 	{
+		index: 4,
 		name: 'Universidad de Quintana Roo',
 		acronym : 'UQROO',
 		city : 'Chetumal',
@@ -90,6 +95,7 @@ var University = function(data) {
 	this.city = ko.observable(data.city);
 	this.state = ko.observable(data.state);
 	this.url = ko.observable(data.url);
+	this.index = data.index;
 	this.location = ko.observable(data.location);
 	this.visible = ko.observable(data.visible);
 }
@@ -154,7 +160,8 @@ function initMap() {
 		var marker = new google.maps.Marker({
 		position: position,
 		map: map,
-		title: title
+		title: title,
+		animation: google.maps.Animation.DROP
 		});
 		markerObjects.push(marker);
 
@@ -223,12 +230,27 @@ function highlightUniversity(university) {
 	// In future: Add some logic that makes it so that when students click on universities
 	// that are located in denser population areas (central mexico) that the zoom level is greater for each university
 	map.setZoom(8);
-	//Using the university object that is passed in to this function: toggle
-	//the highlighted status of the "highlihted property" in the model.
-	//Do I have to do this to the the object passed in as a parameter to this function? Or is this done to the model directly?
-	// On the the actual model.
+	var targetMarkerIndex = university.index;
 
-	//makerObjects()[university.name].setAnimation(google.maps.Animation.DROP);
+	// I had come up with a complex way to change the model, and re-render the pins.
+
+};
+
+
+
+// The idea for using this function comes from github user @nidhigaday
+//Repository (https://github.com/nidhigaday/Neighborhood_Map)
+// In his function, once I saw that markers have an inherent setAnimation() method, I new this was the exact kind 
+// of function that I needed to be called from my highlightUniversity function
+function toggleBounce(pin) {
+    if (pin.getAnimation() !== null) {
+      pin.setAnimation(null);
+    } else {
+      pin.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function() {
+        pin.setAnimation(null);
+      }, 1450);
+    }
 };
 
 
