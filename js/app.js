@@ -222,7 +222,6 @@ function initMap() {
 
 
 // Things that this function still needs before I would say the beef of this project is done:
-// 1. Have a "show all" functionality be the first item in the list
 // 2. Filter by cities too, so those ones that are visible come up to the to
 // 3. Elminiate markers whose correpsonding university objects are set to false OR
 // 4. Perhaps, instead of 4, set bounds to those markers whose correpsonding university lists are set to visible.
@@ -236,8 +235,10 @@ function filterList(formElement) {
 	// Loop through the view model and set the visible proprerty to flase for all of the universities
 	// that aren't the user city (going to want to change this to all)
 	// Maybe add a show all universities button to
+	// When the user clicks on the user caption, which is "show all cities", the value of is undefined
+	// That's why I have the final condition ... && my.viewModel.userCity() != undefined
 	for (var i = 0; i < my.viewModel.universityList().length; i++) {
-		if (my.viewModel.universityList()[i].city() != my.viewModel.userCity()) {
+		if (my.viewModel.universityList()[i].city() != my.viewModel.userCity() && my.viewModel.userCity() != undefined) {
 			my.viewModel.universityList()[i].visible(false);
 		} else {
 			my.viewModel.universityList()[i].visible(true);
