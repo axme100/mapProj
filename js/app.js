@@ -132,6 +132,16 @@ var ViewModel = function() {
         return myUniqueCities;
     }, this);
 
+    this.visibleCities = ko.computed(function() {
+        var visibleCities = [];
+        for (var i = 0; i < this.universityList().length; i++) {
+        	if (this.universityList()[i].visible() == true) {
+        		visibleCities.push(this.universityList()[i])
+        	}
+        }
+        return visibleCities;
+    }, this);
+
 	// Make an empty observable for user filter
 	// This is for whatever the user inputs into the textBox on the sidebar
     this.userFilter = ko.observable("");
@@ -275,9 +285,13 @@ function filterList(formElement) {
 	//my.viewModel.universityList.sortByVisible();
 
 	// This was made for debugging purposes. Basically, it shows that I'm not setting the models to false.
-	//for (var i = 0; i < my.viewModel.universityList().length; i++) {
-	//	console.log(my.viewModel.universityList()[i].name() + " " + my.viewModel.universityList()[i].visible())
-	//};
+	for (var i = 0; i < my.viewModel.universityList().length; i++) {
+	console.log(my.viewModel.universityList()[i].name + " " + my.viewModel.universityList()[i].visible())
+	};
+
+	for (var i = 0; i < my.viewModel.visibleCities().length; i++) {
+	console.log(my.viewModel.visibleCities()[i].name + " " + my.viewModel.visibleCities()[i].visible())
+	};
 
 };
 
