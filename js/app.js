@@ -128,6 +128,14 @@ var ViewModel = function() {
     this.userFilter = ko.observable("");
     this.userCity = ko.observable("");
 
+    //These will be populated by the initMap function
+
+    // Make an empty array of marker objects
+    this.markerObjects = ko.observableArray([])
+    
+    // Make an empty array of InfoWindow Objects
+    this.infoWindowObjects = ko.observableArray([])
+
         
 }
 
@@ -141,13 +149,6 @@ function initMap() {
     //center: {lat: 19.373, lng: -99.131},
     //zoom: 4
     });
-
-    // Make an empty array of marker objects
-    this.markerObjects = ko.observableArray([])
-    
-    // Make an empty array of InfoWindow Objects
-    this.infoWindowObjects = ko.observableArray([])
-
 
     // Go through the university list and add a marker
     // for each of the locations and names in the title
@@ -163,12 +164,12 @@ function initMap() {
 		title: title,
 		animation: google.maps.Animation.DROP
 		});
-		markerObjects.push(marker);
-
+		
 		var infowindow = new google.maps.InfoWindow({
-          
         });
-        infoWindowObjects.push(infowindow);
+
+		my.viewModel.markerObjects.push(marker);
+		my.viewModel.infoWindowObjects.push(infowindow);
 
 		// Utilize closures so that an event listener get's placed
 		// on each marker/info window
@@ -184,7 +185,7 @@ function initMap() {
 		google.maps.event.addListener(marker,'click', (function(marker,infowindow,url){ 
     		return function() {
         		sParameter = encodeURIComponent(marker.title.trim())
-        		console.log(sParameter);
+        		//console.log(sParameter);
         		$.ajax({
 					type: "GET",
     				url: "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&redirects=1&titles=" + sParameter + "&callback=?",
@@ -193,7 +194,7 @@ function initMap() {
         				var pages = data["query"]["pages"];
         				var targetPage = Object.keys(pages)[0];
      					var extract = pages[targetPage]["extract"];
-     					console.log(extract);
+     					//console.log(extract);
      					var contentString = '<h3>' + marker.title + '</h3>' +
      						'<h4> <a href="' +  url + '"> Click here to see academic offering! </a> </h4>' +
      						'<p>' + extract + '</p>'
@@ -211,8 +212,8 @@ function initMap() {
 	// Center the map to fit the bounds of all of the markers
 	//https://stackoverflow.com/questions/19304574/center-set-zoom-of-map-to-cover-all-visible-markers?rq=1&utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 	var bounds = new google.maps.LatLngBounds();
-	for (var i = 0; i < this.markerObjects().length; i++) {
-	bounds.extend(markerObjects()[i].getPosition());
+	for (var i = 0; i < my.viewModel.markerObjects().length; i++) {
+	bounds.extend(my.viewModel.markerObjects()[i].getPosition());
 	}
 
 	map.fitBounds(bounds);
@@ -220,39 +221,24 @@ function initMap() {
 };
 
 function filterList(formElement) {
+	console.log("Function called");
 	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
 };
 
 function highlightUniversity(university) {
 	map.setCenter(university.location());
-	console.log(markerObjects());
-	console.log(markerObjects()[university.name]);//.setAnimation(google.maps.Animation.DROP);
+	
 	// In future: Add some logic that makes it so that when students click on universities
 	// that are located in denser population areas (central mexico) that the zoom level is greater for each university
 	map.setZoom(8);
 	var targetMarkerIndex = university.index;
+	console.log(targetMarkerIndex);
 
-	// I had come up with a complex way to change the model, and re-render the pins.
-
+	my.viewModel.markerObjects()[targetMarkerIndex].setAnimation(google.maps.Animation.BOUNCE);
+	setTimeout(function() {
+        my.viewModel.markerObjects()[targetMarkerIndex].setAnimation(null);
+      }, 2000);
 };
-
-
-
-// The idea for using this function comes from github user @nidhigaday
-//Repository (https://github.com/nidhigaday/Neighborhood_Map)
-// In his function, once I saw that markers have an inherent setAnimation() method, I new this was the exact kind 
-// of function that I needed to be called from my highlightUniversity function
-function toggleBounce(pin) {
-    if (pin.getAnimation() !== null) {
-      pin.setAnimation(null);
-    } else {
-      pin.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout(function() {
-        pin.setAnimation(null);
-      }, 1450);
-    }
-};
-
 
 // I'm creating an instance of my view model called my so 
 // that I can reference data in the vidw model, for example,
