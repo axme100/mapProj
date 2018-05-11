@@ -21,7 +21,7 @@ ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 
 var initialUniversities = [
 	{
-		name: 'Universidad Nacional Autónoma de México (CU)',
+		name: 'Universidad Nacional Autónoma de México',
 		acronym : 'UNAM-CU',
 		city : 'Ciudad de México',
 		state: 'Ciudad de México',
@@ -32,7 +32,7 @@ var initialUniversities = [
 	},
 
 	{
-		name: 'Universidad Iberoamericana (Sante Fe)',
+		name: 'Universidad Iberoamericana Ciudad de México',
 		acronym : 'La Ibero',
 		city : 'Ciudad de México',
 		state: 'Ciudad de México',
@@ -47,6 +47,7 @@ var initialUniversities = [
 		acronym : 'UDLAP-Puebla',
 		city : 'Puebla',
 		state: 'Puebla',
+		url: 'http://www.udlap.mx/posgrados/',
 		visible: true,
 		location: {lat: 19.054410, lng: -98.283289}
 
@@ -57,6 +58,7 @@ var initialUniversities = [
 		acronym : 'UACJ',
 		city : 'Ciudad Juárez',
 		state: 'Chihuahua',
+		url: 'http://www.uacj.mx/oferta/paginas/index_posgrado.html',
 		visible: true,
 		location: {lat: 31.749082, lng: -106.446121}
 
@@ -64,9 +66,10 @@ var initialUniversities = [
 
 	{
 		name: 'Universidad de Quintana Roo',
-		acronym : 'UACJ',
+		acronym : 'UQROO',
 		city : 'Chetumal',
 		state: 'Quintana Roo',
+		url: 'http://www.uqroo.mx/investigacion-y-posgrado/oferta-de-posgrado/',
 		visible: true,
 		location: {lat: 18.525784, lng: -88.270801}
 
@@ -140,12 +143,13 @@ function initMap() {
     this.infoWindowObjects = ko.observableArray([])
 
 
-    // Go throught the university list and add a marker
+    // Go through the university list and add a marker
     // for each of the locations and names in the title
     for (var i = 0; i < my.viewModel.universityList().length; i++) {
 		// When I made the object
 		var position = my.viewModel.universityList()[i].location();
 		var title = my.viewModel.universityList()[i].name();
+		var url = my.viewModel.universityList()[i].url();
 
 		var marker = new google.maps.Marker({
 		position: position,
@@ -155,7 +159,7 @@ function initMap() {
 		markerObjects.push(marker);
 
 		var infowindow = new google.maps.InfoWindow({
-          content: title
+          
         });
         infoWindowObjects.push(infowindow);
 
@@ -170,11 +174,31 @@ function initMap() {
         //  	infowindow.open(map, markerCopy);
         //  };
         //})(marker));
-		google.maps.event.addListener(marker,'click', (function(marker,infowindow){ 
+		google.maps.event.addListener(marker,'click', (function(marker,infowindow,url){ 
     		return function() {
+        		sParameter = encodeURIComponent(marker.title.trim())
+        		console.log(sParameter);
+        		$.ajax({
+					type: "GET",
+    				url: "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&redirects=1&titles=" + sParameter + "&callback=?",
+    				dataType: "json",
+    				success: function (data, textStatus, jqXHR) {
+        				var pages = data["query"]["pages"];
+        				var targetPage = Object.keys(pages)[0];
+     					var extract = pages[targetPage]["extract"];
+     					console.log(extract);
+     					var contentString = '<h3>' + marker.title + '</h3>' +
+     						'<h4> <a href="' +  url + '"> Click here to see academic offering! </a> </h4>' +
+     						'<p>' + extract + '</p>'
+            			infowindow.setContent(contentString);
+       
+    				},
+    				error: function (errorMessage) {
+    				}
+				});
         		infowindow.open(map,marker);
     		};
-		})(marker,infowindow));
+		})(marker,infowindow,url));
 	}
 
 	// Center the map to fit the bounds of all of the markers
@@ -185,6 +209,7 @@ function initMap() {
 	}
 
 	map.fitBounds(bounds);
+
 };
 
 function filterList(formElement) {
@@ -195,13 +220,20 @@ function highlightUniversity(university) {
 	map.setCenter(university.location());
 	console.log(markerObjects());
 	console.log(markerObjects()[university.name]);//.setAnimation(google.maps.Animation.DROP);
+	// In future: Add some logic that makes it so that when students click on universities
+	// that are located in denser population areas (central mexico) that the zoom level is greater for each university
 	map.setZoom(8);
-	//makerObjects()[university.name].setAnimation(google.maps.Animation.DROP);
+	//Using the university object that is passed in to this function: toggle
+	//the highlighted status of the "highlihted property" in the model.
+	//Do I have to do this to the the object passed in as a parameter to this function? Or is this done to the model directly?
+	// On the the actual model.
 
+	//makerObjects()[university.name].setAnimation(google.maps.Animation.DROP);
 };
+
 
 // I'm creating an instance of my view model called my so 
 // that I can reference data in the vidw model, for example,
-// see the following post: https://stackoverflow.com/questions/46943988/how-can-i-access-an-observable-outside-the-viewmodel-in-knockoutjs?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+// see the fsollowing post: https://stackoverflow.com/questions/46943988/how-can-i-access-an-observable-outside-the-viewmodel-in-knockoutjs?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 my = { viewModel: new ViewModel() };
 ko.applyBindings(my.viewModel);
