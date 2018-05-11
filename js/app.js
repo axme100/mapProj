@@ -13,22 +13,8 @@ ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	});
 }
 
-function containsObject(obj, list) {
-    var i;
-    console.log("obj: ")
-    console.log(obj);
-    console.log("list: ")
-    console.log(list);
-    for (i = 0; i < list.length; i++) {
-        if (list[i] === obj) {
-            return true;
-        }
-    }
-    return false;
-}
-
 /* Model */
-// TODO: Add some more data from the most prestiguous schools in Mexico
+// TODO: Add some more data from the most prestigious schools in Mexico
 var initialUniversities = [
 	{
 		index: 0,
@@ -132,6 +118,9 @@ var ViewModel = function() {
         return myUniqueCities;
     }, this);
 
+    // Create a computed observable of all of the cities that are set to visible
+    // This will be binded to to html page.
+    // Binding the list of universities to this, keeps the relevant ones at the top of the menu.
     this.visibleCities = ko.computed(function() {
         var visibleCities = [];
         for (var i = 0; i < this.universityList().length; i++) {
@@ -173,9 +162,6 @@ var ViewModel = function() {
         console.log(selectedCityMarkers);
         return selectedCityMarkers;
     }, this);
-    
-
-
         
 }
 
@@ -207,7 +193,7 @@ function initMap() {
 		my.viewModel.infoWindowObjects.push(infowindow);
 
 		
-		// Add event listerner to each marker
+		// Add event listener to each marker
 		// AJAX is called when the marker is clicked
 		// Since users will not click on every marker
 		google.maps.event.addListener(marker,'click', (function(marker,infowindow,url){ 
@@ -248,14 +234,9 @@ function initMap() {
 
 };
 
-// Things that this function still needs before I would say the beef of this project is done:
-// 2. Filter by cities too, so those ones that are visible come up to the to
-// 3. Elminiate markers whose correpsonding university objects are set to false OR
-// 4. Perhaps, instead of 4, set bounds to those markers whose correpsonding university lists are set to visible.
-// Tidy up code, code-review, spelling, checklist
 function filterList(formElement) {
-	// Loop through the view model and set the visible proprerty to false for all of the universities
-	// that aren't the user city 
+	// Loop through the view model and set the visible property to false for all of the universities
+	// that aren't the user city, otherwise set this property to 2
 	for (var i = 0; i < my.viewModel.universityList().length; i++) {
 		if (my.viewModel.universityList()[i].city != my.viewModel.userSelectedCity() && my.viewModel.userSelectedCity() != undefined) {
 			my.viewModel.universityList()[i].visible(false);
@@ -264,48 +245,29 @@ function filterList(formElement) {
 		}
 	};
 
+	// Apply the custom user filter
 	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
 	
+	// Extend the city bounds for all of the markers pertaining to a certain city
+	// TODO: Instead of relying on selectedCityMarkers() which is a knockOut observable
+	// I should just loop through the selectedCityMarkers and create a list of those markers
+	// particular to a city at this point in the code
 	var cityBounds = new google.maps.LatLngBounds();
 	for (var i = 0; i < my.viewModel.selectedCityMarkers().length; i++) {
 		console.log(my.viewModel.selectedCityMarkers()[i].getPosition());
 		cityBounds.extend(my.viewModel.selectedCityMarkers()[i].getPosition())
 	};
 
+	// TODO: Add some custom logic so that the map is zoomed out for areas with less universities
 	map.fitBounds(cityBounds);
 	map.setZoom(8);
-	
-
-
-	//bounds.extend(my.viewModel.markerObjects()[i].getPosition());
-	///}
-
-	//map.fitBounds(bounds);
-
-	//my.viewModel.universityList.sortByVisible();
-
-	// This was made for debugging purposes. Basically, it shows that I'm not setting the models to false.
-	for (var i = 0; i < my.viewModel.universityList().length; i++) {
-	console.log(my.viewModel.universityList()[i].name + " " + my.viewModel.universityList()[i].visible())
-	};
-
-	for (var i = 0; i < my.viewModel.visibleCities().length; i++) {
-	console.log(my.viewModel.visibleCities()[i].name + " " + my.viewModel.visibleCities()[i].visible())
-	};
 
 };
 
-// Things that this function still needs before I would say the beef of this project is done:
-// 1. Open the info window when users click on the uniersity
-// 2. Feedback from tutor: only pass in the index directly from the html page, if this is possible.
-// 3. Add custom zoom logic for large population areas (maybe I don't need # 2 for this then)
-// 4. Add some more data maybe add all of the "top universities in Mexico"
-
 function highlightUniversity(university) {
 	map.setCenter(university.location);
-	
-	// In future: Add some logic that makes it so that when students click on universities
-	// that are located in denser population areas (central mexico) that the zoom level is greater for each university
+	// TODO: Add some logic that makes it so that when students click on universities
+	// that are located in denser population areas (for example, central Mexico) that the zoom level is greater
 	map.setZoom(8);
 	var targetMarkerIndex = university.index;
 	console.log(targetMarkerIndex);
@@ -314,10 +276,16 @@ function highlightUniversity(university) {
 	setTimeout(function() {
         my.viewModel.markerObjects()[targetMarkerIndex][1].setAnimation(null);
       }, 2000);
+
+	my.viewModel.infoWindowObjects()[targetMarkerIndex].setContent("Click Me More Info")
+
+	my.viewModel.infoWindowObjects()[targetMarkerIndex].open(map, my.viewModel.markerObjects()[targetMarkerIndex][1])
+
 };
 
-// I'm creating an instance of my view model called my so 
-// that I can reference data in the vidw model, for example,
-// see the fsollowing post: https://stackoverflow.com/questions/46943988/how-can-i-access-an-observable-outside-the-viewmodel-in-knockoutjs?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+/* Apply Bindings */
+// I'm creating an instance of my view model called "my" 
+// The idea for this comes from the following post on the next line:
+// https://stackoverflow.com/questions/46943988/how-can-i-access-an-observable-outside-the-viewmodel-in-knockoutjs?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 my = { viewModel: new ViewModel() };
 ko.applyBindings(my.viewModel);
