@@ -1,2 +1,8 @@
 node_modules
 ./package-lock.json
+package.json
+package-lock.json
+gulpfile.js
+gulpfile.js
+.travis.yml
+__pycache__/
