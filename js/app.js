@@ -19,6 +19,15 @@ ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	});
 }
 
+ko.observableArray.fn.sortByVisible = function() {
+	this.sort(function(obj1) {
+		if (obj1.visible == true) 
+			return 0;
+		else 
+			return 1;
+	});
+}
+
 var initialUniversities = [
 	{
 		index: 0,
@@ -226,10 +235,8 @@ function initMap() {
 // 3. Elminiate markers whose correpsonding university objects are set to false OR
 // 4. Perhaps, instead of 4, set bounds to those markers whose correpsonding university lists are set to visible.
 // Tidy up code, code-review, spelling, checklist
-
-
 function filterList(formElement) {
-	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
+	
 	console.log("current user selected city is: " + my.viewModel.userCity());
 
 	// Loop through the view model and set the visible proprerty to flase for all of the universities
@@ -245,10 +252,14 @@ function filterList(formElement) {
 		}
 	};
 
+	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
+
+	//my.viewModel.universityList.sortByVisible();
+
 	// This was made for debugging purposes. Basically, it shows that I'm not setting the models to false.
-	for (var i = 0; i < my.viewModel.universityList().length; i++) {
-		console.log(my.viewModel.universityList()[i].name() + " " + my.viewModel.universityList()[i].visible())
-	};
+	//for (var i = 0; i < my.viewModel.universityList().length; i++) {
+	//	console.log(my.viewModel.universityList()[i].name() + " " + my.viewModel.universityList()[i].visible())
+	//};
 
 };
 
