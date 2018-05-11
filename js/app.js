@@ -4,7 +4,7 @@
 // TODO: Ignore accent marks because a lot of people won't be able to type them
 ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	this.sort(function(obj1) {
-		if (obj1.name == customFilter || obj1.name().indexOf(customFilter) != -1) 
+		if (obj1.name == customFilter || obj1.name.indexOf(customFilter) != -1) 
 			return 0;
 		else if (obj1.name < customFilter) 
 			return -1 ;
@@ -13,17 +13,22 @@ ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	});
 }
 
-ko.observableArray.fn.sortByVisible = function() {
-	this.sort(function(obj1) {
-		if (obj1.visible == true) 
-			return 0;
-		else 
-			return 1;
-	});
+function containsObject(obj, list) {
+    var i;
+    console.log("obj: ")
+    console.log(obj);
+    console.log("list: ")
+    console.log(list);
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /* Model */
-
+// TODO: Add some more data from the most prestiguous schools in Mexico
 var initialUniversities = [
 	{
 		index: 0,
@@ -87,21 +92,15 @@ var initialUniversities = [
 
 	]
 
+// TODO: Incorporate Acronym and State Into App, that is into infowindows
 var University = function(data) {
-	// When creating all of the university objects,
-	// It seems like the only one that needs to be 
-	// a ko.observable is "visible", because it's the one
-	// that is going to change, all the other locations
-	// Are going to be hard coded.....?
-	// Or should it be anyway, since it needs to be
-	//data-binded to the html file.
-	this.name = ko.observable(data.name);
-	this.acronym = ko.observable(data.acronym);
-	this.city = ko.observable(data.city);
-	this.state = ko.observable(data.state);
-	this.url = ko.observable(data.url);
+	this.name = data.name;
+	this.acronym = data.acronym;
+	this.city = data.city;
+	this.state = data.state;
+	this.url = data.url;
 	this.index = data.index;
-	this.location = ko.observable(data.location);
+	this.location = data.location;
 	this.visible = ko.observable(data.visible);
 }
 
@@ -111,19 +110,20 @@ var University = function(data) {
 var ViewModel = function() {
 	var self = this;
 
-	// Make an observable array
+	// Create an empty observable array of University Data
 	this.universityList = ko.observableArray([]);
 
-	// Go through all of the initialUnivesity data and add it to this array
+	// Loop through all of the model and add it to the array
 	initialUniversities.forEach(function(university) {
 		self.universityList.push( new University(university) );
 	});
 
-	//Maybe change to self
+	// Create an computed observable that contains a list of the unique cities
+	// The drop-down menu on the sidebar is binded to this list
 	this.uniqueCities = ko.computed(function() {
         var myUniqueCities = [];
         for (var i = 0; i < this.universityList().length; i++) {
-        	var theCity = self.universityList()[i].city();
+        	var theCity = self.universityList()[i].city;
         	if (myUniqueCities.indexOf(theCity) == -1) {
         		myUniqueCities.push(theCity)
         	}
@@ -132,16 +132,39 @@ var ViewModel = function() {
         return myUniqueCities;
     }, this);
 
+	// Make an empty observable for user filter
+	// This is for whatever the user inputs into the textBox on the sidebar
     this.userFilter = ko.observable("");
-    this.userCity = ko.observable("");
-
-    //These will be populated by the initMap function
+    
+    // Make an empty observable for userSelected city
+    // User city is the city that the user wants to focus on
+    this.userSelectedCity = ko.observable("");
 
     // Make an empty array of marker objects
+    // This will be populated by the initMap function
     this.markerObjects = ko.observableArray([]);
     
     // Make an empty array of InfoWindow Objects
+    // This will also be populated by the initMap function
     this.infoWindowObjects = ko.observableArray([]);
+
+    this.selectedCityMarkers = ko.computed(function() {
+        var selectedCityMarkers = [];
+        for (var i = 0; i < this.markerObjects().length; i++) {
+        	console.log(this.markerObjects()[i][0]);
+        	console.log(this.userSelectedCity());
+        	console.log("*****");
+        	if (this.markerObjects()[i][0] == this.userSelectedCity()) {
+        		console.log("entered conditional")
+        		console.log("item to be pushed" + this.markerObjects()[i][1]);
+        		selectedCityMarkers.push(this.markerObjects()[i][1]);
+        	};
+        };
+        console.log(selectedCityMarkers);
+        return selectedCityMarkers;
+    }, this);
+    
+
 
         
 }
@@ -149,21 +172,16 @@ var ViewModel = function() {
 /* View */
 
 function initMap() {
-    // Constructor creates a new map - only center and zoom are required.
-    map = new google.maps.Map(document.getElementById('map'), {
-    // These can be deleted because I'm now extending the edge of the map ot all of the
-    // markers
-    //center: {lat: 19.373, lng: -99.131},
-    //zoom: 4
-    });
+    // Constructor creates a new map
+    map = new google.maps.Map(document.getElementById('map'), {});
 
     // Go through the university list and add a marker
     // for each of the locations and names in the title
     for (var i = 0; i < my.viewModel.universityList().length; i++) {
-		// When I made the object
-		var position = my.viewModel.universityList()[i].location();
-		var title = my.viewModel.universityList()[i].name();
-		var url = my.viewModel.universityList()[i].url();
+		var position = my.viewModel.universityList()[i].location;
+		var title = my.viewModel.universityList()[i].name;
+		var url = my.viewModel.universityList()[i].url;
+		var city = my.viewModel.universityList()[i].city;
 
 		var marker = new google.maps.Marker({
 		position: position,
@@ -175,24 +193,17 @@ function initMap() {
 		var infowindow = new google.maps.InfoWindow({
         });
 
-		my.viewModel.markerObjects.push(marker);
+		my.viewModel.markerObjects.push([city,marker]);
 		my.viewModel.infoWindowObjects.push(infowindow);
 
-		// Utilize closures so that an event listener get's placed
-		// on each marker/info window
-		// I don't REALLY understand what's going on here
-		// at this point, I pretty much just adapted
-		// the solution that is happening here:\
-		// https://classroom.udacity.com/nanodegrees/nd004/parts/135b6edc-f1cd-4cd9-b831-1908ede75737/modules/bb387669-2b0b-4b27-ba08-5219101b23aa/lessons/3417188540/concepts/34803486710923
-        //marker.addListener('click', (function(markerCopy) {
-        //  return function() {
-        //  	infowindow.open(map, markerCopy);
-        //  };
-        //})(marker));
+		
+		// Add event listerner to each marker
+		// AJAX is called when the marker is clicked
+		// Since users will not click on every marker
 		google.maps.event.addListener(marker,'click', (function(marker,infowindow,url){ 
     		return function() {
+        		// Prepare the marker.title for the API URL: trip white space and replace with %20
         		sParameter = encodeURIComponent(marker.title.trim())
-        		//console.log(sParameter);
         		$.ajax({
 					type: "GET",
     				url: "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&redirects=1&titles=" + sParameter + "&callback=?",
@@ -217,16 +228,15 @@ function initMap() {
 	}
 
 	// Center the map to fit the bounds of all of the markers
-	//https://stackoverflow.com/questions/19304574/center-set-zoom-of-map-to-cover-all-visible-markers?rq=1&utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+	// Credit: https://stackoverflow.com/questions/19304574/center-set-zoom-of-map-to-cover-all-visible-markers?rq=1&utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 	var bounds = new google.maps.LatLngBounds();
 	for (var i = 0; i < my.viewModel.markerObjects().length; i++) {
-	bounds.extend(my.viewModel.markerObjects()[i].getPosition());
+	bounds.extend(my.viewModel.markerObjects()[i][1].getPosition());
 	}
 
 	map.fitBounds(bounds);
 
 };
-
 
 // Things that this function still needs before I would say the beef of this project is done:
 // 2. Filter by cities too, so those ones that are visible come up to the to
@@ -234,16 +244,10 @@ function initMap() {
 // 4. Perhaps, instead of 4, set bounds to those markers whose correpsonding university lists are set to visible.
 // Tidy up code, code-review, spelling, checklist
 function filterList(formElement) {
-	
-	console.log("current user selected city is: " + my.viewModel.userCity());
-
-	// Loop through the view model and set the visible proprerty to flase for all of the universities
-	// that aren't the user city (going to want to change this to all)
-	// Maybe add a show all universities button to
-	// When the user clicks on the user caption, which is "show all cities", the value of is undefined
-	// That's why I have the final condition ... && my.viewModel.userCity() != undefined
+	// Loop through the view model and set the visible proprerty to false for all of the universities
+	// that aren't the user city 
 	for (var i = 0; i < my.viewModel.universityList().length; i++) {
-		if (my.viewModel.universityList()[i].city() != my.viewModel.userCity() && my.viewModel.userCity() != undefined) {
+		if (my.viewModel.universityList()[i].city != my.viewModel.userSelectedCity() && my.viewModel.userSelectedCity() != undefined) {
 			my.viewModel.universityList()[i].visible(false);
 		} else {
 			my.viewModel.universityList()[i].visible(true);
@@ -251,6 +255,22 @@ function filterList(formElement) {
 	};
 
 	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
+	
+	var cityBounds = new google.maps.LatLngBounds();
+	for (var i = 0; i < my.viewModel.selectedCityMarkers().length; i++) {
+		console.log(my.viewModel.selectedCityMarkers()[i].getPosition());
+		cityBounds.extend(my.viewModel.selectedCityMarkers()[i].getPosition())
+	};
+
+	map.fitBounds(cityBounds);
+	map.setZoom(8);
+	
+
+
+	//bounds.extend(my.viewModel.markerObjects()[i].getPosition());
+	///}
+
+	//map.fitBounds(bounds);
 
 	//my.viewModel.universityList.sortByVisible();
 
@@ -268,7 +288,7 @@ function filterList(formElement) {
 // 4. Add some more data maybe add all of the "top universities in Mexico"
 
 function highlightUniversity(university) {
-	map.setCenter(university.location());
+	map.setCenter(university.location);
 	
 	// In future: Add some logic that makes it so that when students click on universities
 	// that are located in denser population areas (central mexico) that the zoom level is greater for each university
@@ -276,9 +296,9 @@ function highlightUniversity(university) {
 	var targetMarkerIndex = university.index;
 	console.log(targetMarkerIndex);
 
-	my.viewModel.markerObjects()[targetMarkerIndex].setAnimation(google.maps.Animation.BOUNCE);
+	my.viewModel.markerObjects()[targetMarkerIndex][1].setAnimation(google.maps.Animation.BOUNCE);
 	setTimeout(function() {
-        my.viewModel.markerObjects()[targetMarkerIndex].setAnimation(null);
+        my.viewModel.markerObjects()[targetMarkerIndex][1].setAnimation(null);
       }, 2000);
 };
 
