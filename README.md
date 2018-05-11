@@ -1,6 +1,3 @@
-# Plan for backend map project
+# Udacity Neighborhood Map PRoject
 
-## Set up database using database_setup.py file
-The plan is to create an sqlite database, in fact, the scheme for this database is in database_setup.py
-By running the `add_examples.py` file, 3 example universities will be added to the database
-
+## To run: clone this repository and open the file index.html in your browser. Make sure to insert your API key in the <src> tag that calls google maps.
