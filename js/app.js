@@ -131,10 +131,10 @@ var ViewModel = function() {
     //These will be populated by the initMap function
 
     // Make an empty array of marker objects
-    this.markerObjects = ko.observableArray([])
+    this.markerObjects = ko.observableArray([]);
     
     // Make an empty array of InfoWindow Objects
-    this.infoWindowObjects = ko.observableArray([])
+    this.infoWindowObjects = ko.observableArray([]);
 
         
 }
@@ -220,10 +220,42 @@ function initMap() {
 
 };
 
+
+// Things that this function still needs before I would say the beef of this project is done:
+// 1. Have a "show all" functionality be the first item in the list
+// 2. Filter by cities too, so those ones that are visible come up to the to
+// 3. Elminiate markers whose correpsonding university objects are set to false OR
+// 4. Perhaps, instead of 4, set bounds to those markers whose correpsonding university lists are set to visible.
+// Tidy up code, code-review, spelling, checklist
+
+
 function filterList(formElement) {
-	console.log("Function called");
 	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
+	console.log("current user selected city is: " + my.viewModel.userCity());
+
+	// Loop through the view model and set the visible proprerty to flase for all of the universities
+	// that aren't the user city (going to want to change this to all)
+	// Maybe add a show all universities button to
+	for (var i = 0; i < my.viewModel.universityList().length; i++) {
+		if (my.viewModel.universityList()[i].city() != my.viewModel.userCity()) {
+			my.viewModel.universityList()[i].visible(false);
+		} else {
+			my.viewModel.universityList()[i].visible(true);
+		}
+	};
+
+	// This was made for debugging purposes. Basically, it shows that I'm not setting the models to false.
+	for (var i = 0; i < my.viewModel.universityList().length; i++) {
+		console.log(my.viewModel.universityList()[i].name() + " " + my.viewModel.universityList()[i].visible())
+	};
+
 };
+
+// Things that this function still needs before I would say the beef of this project is done:
+// 1. Open the info window when users click on the uniersity
+// 2. Feedback from tutor: only pass in the index directly from the html page, if this is possible.
+// 3. Add custom zoom logic for large population areas (maybe I don't need # 2 for this then)
+// 4. Add some more data maybe add all of the "top universities in Mexico"
 
 function highlightUniversity(university) {
 	map.setCenter(university.location());

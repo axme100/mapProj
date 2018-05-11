@@ -34,7 +34,7 @@
             </form>
             <br>
             <ul data-bind="foreach: universityList" class="sidebar-nav">
-                <li class="sidebar-brand">
+                <li data-bind="if: visible" class="sidebar-brand">
                     <a data-bind="text: name, click: highlightUniversity"> </a>
                 </li>
                 <br>
