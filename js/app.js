@@ -1,7 +1,7 @@
 // Extend the observable array to add custom sorting:
 // Credit owed to this blog: https://www.strathweb.com/2012/07/knockout-js-pro-tips-working-with-observable-arrays/
-// TODO: Ignore caps when doing the sorting
-// TODO: Ignore accent marks because a lot of people won't be able to type them
+// TODO (Future): Ignore caps when doing the sorting
+// TODO (Future): Ignore accent marks because a lot of people won't be able to type them
 ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	this.sort(function(obj1) {
 		if (obj1.name == customFilter || obj1.name.indexOf(customFilter) != -1)
@@ -78,7 +78,7 @@ var initialUniversities = [
 
 	]
 
-// TODO: Incorporate Acronym and State Into App, that is into infowindows
+// TODO (Future): Incorporate Acronym and State Into App, that is into infowindows
 var University = function(data) {
 	this.name = data.name;
 	this.acronym = data.acronym;
@@ -260,7 +260,7 @@ function filterList(formElement) {
 
 function highlightUniversity(university) {
 	map.setCenter(university.location);
-	// TODO: Add some logic that makes it so that when students click on universities
+	// TODO (Future): Add some logic that makes it so that when students click on universities
 	// that are located in denser population areas (for example, central Mexico) that the zoom level is greater
 	map.setZoom(8);
 	var targetMarkerIndex = university.index;

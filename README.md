@@ -1,9 +1,11 @@
 # Udacity Neighborhood Map PRoject
 
-## To run: clone this repository and open the file index.html in your browser. Make sure to insert your API key in the <src> tag that calls google maps.
+## To run: clone this repository and open the file index.html in your browser.
 
-## This project depends on the bootstrap simple sidebar CSS and JS frame.
-(https://github.com/BlackrockDigital/startbootstrap-simple-sidebar)
+## Project is built using the following tools/resources
+1. Bootstrap Simple Sidebar template (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar)
+2. This project is built using the Google Maps API
+3. Wikipedia to display information about each university when the associated Google Maps marker is clicked.
 
 
 
