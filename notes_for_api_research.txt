@@ -1,9 +1,0 @@
-Am I going to be using jquery selectors? I don't think so beause I think I"m just going to be inserting the data inside of a the infoWindows.
-
-https://stackoverflow.com/questions/3381700/google-maps-v3-loading-infowindow-content-via-ajax?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-
-http://biostall.com/loading-infowindow-content-using-ajax-with-google-maps-api/
-It looks like the ajax request for the image should be made inside the event listener.
-
-This is an example of how one person is doing it:
-https://gist.github.com/maxim75/1037392
