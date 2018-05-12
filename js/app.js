@@ -141,27 +141,11 @@ var ViewModel = function() {
 
     // Make an empty array of marker objects
     // This will be populated by the initMap function
-    this.markerObjects = ko.observableArray([]);
+    this.markerObjects = [];
     
     // Make an empty array of InfoWindow Objects
     // This will also be populated by the initMap function
-    this.infoWindowObjects = ko.observableArray([]);
-
-    this.selectedCityMarkers = ko.computed(function() {
-        var selectedCityMarkers = [];
-        for (var i = 0; i < this.markerObjects().length; i++) {
-        	console.log(this.markerObjects()[i][0]);
-        	console.log(this.userSelectedCity());
-        	console.log("*****");
-        	if (this.markerObjects()[i][0] == this.userSelectedCity()) {
-        		console.log("entered conditional")
-        		console.log("item to be pushed" + this.markerObjects()[i][1]);
-        		selectedCityMarkers.push(this.markerObjects()[i][1]);
-        	};
-        };
-        console.log(selectedCityMarkers);
-        return selectedCityMarkers;
-    }, this);
+    this.infoWindowObjects = [];
         
 }
 
@@ -226,8 +210,8 @@ function initMap() {
 	// Center the map to fit the bounds of all of the markers
 	// Credit: https://stackoverflow.com/questions/19304574/center-set-zoom-of-map-to-cover-all-visible-markers?rq=1&utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 	var bounds = new google.maps.LatLngBounds();
-	for (var i = 0; i < my.viewModel.markerObjects().length; i++) {
-	bounds.extend(my.viewModel.markerObjects()[i][1].getPosition());
+	for (var i = 0; i < my.viewModel.markerObjects.length; i++) {
+	bounds.extend(my.viewModel.markerObjects[i][1].getPosition());
 	}
 
 	map.fitBounds(bounds);
@@ -248,19 +232,29 @@ function filterList(formElement) {
 	// Apply the custom user filter
 	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
 	
-	// Extend the city bounds for all of the markers pertaining to a certain city
-	// TODO: Instead of relying on selectedCityMarkers() which is a knockOut observable
-	// I should just loop through the selectedCityMarkers and create a list of those markers
-	// particular to a city at this point in the code
+	// Extend the city bounds for all of the markers pertaining to the userSelectedCity
 	var cityBounds = new google.maps.LatLngBounds();
-	for (var i = 0; i < my.viewModel.selectedCityMarkers().length; i++) {
-		console.log(my.viewModel.selectedCityMarkers()[i].getPosition());
-		cityBounds.extend(my.viewModel.selectedCityMarkers()[i].getPosition())
+	for (var i = 0; i < my.viewModel.markerObjects.length; i++) {
+		console.log("1: " + my.viewModel.markerObjects[i][0] + "2: " + my.viewModel.userSelectedCity())
+		if (my.viewModel.markerObjects[i][0] == my.viewModel.userSelectedCity()) {
+			console.log("entered conditional");
+			console.log(my.viewModel.markerObjects[i][1].getPosition())
+			cityBounds.extend(my.viewModel.markerObjects[i][1].getPosition());
+		} else if (my.viewModel.userSelectedCity() == undefined) {
+			console.log("entered here22222");
+			console.log(my.viewModel.markerObjects[i][1].getPosition())
+			cityBounds.extend(my.viewModel.markerObjects[i][1].getPosition());
+		};
+		
 	};
 
-	// TODO: Add some custom logic so that the map is zoomed out for areas with less universities
+	
 	map.fitBounds(cityBounds);
-	map.setZoom(8);
+	
+	// In case there is only one point in this city, we don't want to be too zoomed in.
+	if (my.viewModel.userSelectedCity() == "Ciudad Juárez" || my.viewModel.userSelectedCity() == "Chetumal" || my.viewModel.userSelectedCity() == "Puebla") {
+		map.setZoom(8);
+	}
 
 };
 
@@ -272,14 +266,14 @@ function highlightUniversity(university) {
 	var targetMarkerIndex = university.index;
 	console.log(targetMarkerIndex);
 
-	my.viewModel.markerObjects()[targetMarkerIndex][1].setAnimation(google.maps.Animation.BOUNCE);
+	my.viewModel.markerObjects[targetMarkerIndex][1].setAnimation(google.maps.Animation.BOUNCE);
 	setTimeout(function() {
-        my.viewModel.markerObjects()[targetMarkerIndex][1].setAnimation(null);
+        my.viewModel.markerObjects[targetMarkerIndex][1].setAnimation(null);
       }, 2000);
 
-	my.viewModel.infoWindowObjects()[targetMarkerIndex].setContent("Click Me More Info")
+	my.viewModel.infoWindowObjects[targetMarkerIndex].setContent("Click Me More Info")
 
-	my.viewModel.infoWindowObjects()[targetMarkerIndex].open(map, my.viewModel.markerObjects()[targetMarkerIndex][1])
+	my.viewModel.infoWindowObjects[targetMarkerIndex].open(map, my.viewModel.markerObjects[targetMarkerIndex][1])
 
 };
 
