@@ -191,6 +191,12 @@ function initMap() {
     // Constructor creates a new map
     map = new google.maps.Map(document.getElementById('map'), {});
 
+    // For the makeMarkerIcon function credit is owed to the "Being Stylish" (Lesson 1, number 10 in Google Maps API Udacity Course)
+    // See link: https://classroom.udacity.com/courses/ud864/lessons/8304370457/concepts/83122494470923
+    var defaultIcon = makeMarkerIcon('00cc00');
+    
+    var highlightedIcon = makeMarkerIcon('FFFF24');
+
     // Go through the university list and add a marker
     // for each of the locations and names in the title
     for (var i = 0; i < my.viewModel.universityList().length; i++) {
@@ -203,6 +209,7 @@ function initMap() {
 		position: position,
 		map: map,
 		title: title,
+		icon: defaultIcon,
 		animation: google.maps.Animation.DROP
 		});
 
@@ -212,6 +219,19 @@ function initMap() {
 		my.viewModel.markerObjects.push([city,marker]);
 		my.viewModel.infoWindowObjects.push(infowindow);
 
+		// Add two event listeners to the marker that make it change colors
+		// When you hover over it
+        marker.addListener('mouseover', (function(marker){ 
+    		return function() {
+        		marker.setIcon(highlightedIcon);
+    		};
+		})(marker));
+
+        marker.addListener('mouseout', (function(marker){ 
+    		return function() {
+        		marker.setIcon(defaultIcon);
+    		};
+		})(marker));
 
 		// Add event listener to each marker
 		// AJAX is called when the marker is clicked
@@ -317,6 +337,19 @@ function highlightUniversity(university) {
 function googleError() {
 	alert("Sorry, Google Maps Could not Be Loaded, Please Check Your Internet Connection!");
 };
+
+// (See above) For the makeMarkerIcon function credit is owed to the "Being Stylish" (Lesson 1, number 10 in Google Maps API Udacity Course)
+// See link: https://classroom.udacity.com/courses/ud864/lessons/8304370457/concepts/83122494470923
+function makeMarkerIcon(markerColor) {
+var markerImage = new google.maps.MarkerImage(
+		'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+		'|40|_|%E2%80%A2',
+		new google.maps.Size(21, 34),
+		new google.maps.Point(0, 0),
+		new google.maps.Point(10, 34),
+		new google.maps.Size(21,34));
+	return markerImage;
+}
 
 /* Apply Bindings */
 // I'm creating an instance of my view model called "my" 
