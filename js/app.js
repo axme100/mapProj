@@ -4,11 +4,11 @@
 // TODO: Ignore accent marks because a lot of people won't be able to type them
 ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	this.sort(function(obj1) {
-		if (obj1.name == customFilter || obj1.name.indexOf(customFilter) != -1) 
+		if (obj1.name == customFilter || obj1.name.indexOf(customFilter) != -1)
 			return 0;
-		else if (obj1.name < customFilter) 
+		else if (obj1.name < customFilter)
 			return -1 ;
-		else 
+		else
 			return 1;
 	});
 }
@@ -114,7 +114,7 @@ var ViewModel = function() {
         		myUniqueCities.push(theCity)
         	}
         }
-        
+
         return myUniqueCities;
     }, this);
 
@@ -134,7 +134,7 @@ var ViewModel = function() {
 	// Make an empty observable for user filter
 	// This is for whatever the user inputs into the textBox on the sidebar
     this.userFilter = ko.observable("");
-    
+
     // Make an empty observable for userSelected city
     // User city is the city that the user wants to focus on
     this.userSelectedCity = ko.observable("");
@@ -142,11 +142,11 @@ var ViewModel = function() {
     // Make an empty array of marker objects
     // This will be populated by the initMap function
     this.markerObjects = [];
-    
+
     // Make an empty array of InfoWindow Objects
     // This will also be populated by the initMap function
     this.infoWindowObjects = [];
-        
+
 }
 
 /* View */
@@ -169,14 +169,14 @@ function initMap() {
 		title: title,
 		animation: google.maps.Animation.DROP
 		});
-		
+
 		var infowindow = new google.maps.InfoWindow({
         });
 
 		my.viewModel.markerObjects.push([city,marker]);
 		my.viewModel.infoWindowObjects.push(infowindow);
 
-		
+
 		// Add event listener to each marker
 		// AJAX is called when the marker is clicked
 		// Since users will not click on every marker
@@ -197,7 +197,7 @@ function initMap() {
      						'<h4> <a href="' +  url + '"> Click here to see academic offering! </a> </h4>' +
      						'<p>' + extract + '</p>'
             			infowindow.setContent(contentString);
-       
+
     				},
     				error: function (errorMessage) {
     				}
@@ -231,7 +231,7 @@ function filterList(formElement) {
 
 	// Apply the custom user filter
 	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
-	
+
 	// Extend the city bounds for all of the markers pertaining to the userSelectedCity
 	var cityBounds = new google.maps.LatLngBounds();
 	for (var i = 0; i < my.viewModel.markerObjects.length; i++) {
@@ -245,12 +245,12 @@ function filterList(formElement) {
 			console.log(my.viewModel.markerObjects[i][1].getPosition())
 			cityBounds.extend(my.viewModel.markerObjects[i][1].getPosition());
 		};
-		
+
 	};
 
-	
+
 	map.fitBounds(cityBounds);
-	
+
 	// In case there is only one point in this city, we don't want to be too zoomed in.
 	if (my.viewModel.userSelectedCity() == "Ciudad Juárez" || my.viewModel.userSelectedCity() == "Chetumal" || my.viewModel.userSelectedCity() == "Puebla") {
 		map.setZoom(8);
