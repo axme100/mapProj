@@ -74,6 +74,42 @@ var initialUniversities = [
 		visible: true,
 		location: {lat: 18.525784, lng: -88.270801}
 
+	},
+
+	{
+		index: 5,
+		name: 'Tecnológico de Monterrey',
+		acronym : 'ITESM',
+		city : 'Monterrey',
+		state: 'Nuevo Léon',
+		url: 'http://www.uqroo.mx/investigacion-y-posgrado/oferta-de-posgrado/',
+		visible: true,
+		location: {lat: 25.652271, lng: -100.289443}
+
+	},
+
+	{
+		index: 6,
+		name: 'Universidad Autónoma de Nuevo León',
+		acronym : 'UANL',
+		city : 'Monterrey',
+		state: 'Nuevo León',
+		url: 'http://www.uqroo.mx/investigacion-y-posgrado/oferta-de-posgrado/',
+		visible: true,
+		location: {lat: 25.726551, lng: -100.313116}
+
+	},
+
+	{
+		index: 7,
+		name: 'Universidad de Guadalajara',
+		acronym : 'UDF',
+		city : 'Guadalajara',
+		state: 'Jalisco',
+		url: 'http://www.uqroo.mx/investigacion-y-posgrado/oferta-de-posgrado/',
+		visible: true,
+		location: {lat: 20.674834, lng: -103.359045}
+
 	}
 
 	]
@@ -277,6 +313,7 @@ function highlightUniversity(university) {
 
 };
 
+/* Run an error function in case google maps doesn't load */
 function googleError() {
 	alert("Sorry, Google Maps Could not Be Loaded, Please Check Your Internet Connection!");
 };
