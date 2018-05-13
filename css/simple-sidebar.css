@@ -11,6 +11,8 @@ body {
 #map {
   min-height: 80vh;
   overflow: visible;
+  width: auto;
+  padding-bottom: 56.247%; /*image width * 100 / height*/
 }
 
 /*Creating the following two classes and embedding the <map> tag between <div> was this option*/

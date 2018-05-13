@@ -21,6 +21,7 @@ This is a similar discussion post I could use but there are no answers: (https:/
 "Karol is right, check out P2 for easily usable code for your map, much of it is the same, you can modify the functions and use much of the map code for this project. Making the map responsive has more to do with how the markers get shown on screen and the size of the map vs the viewport. Flex and flex boxes may fix some of your responsiveness issues for your menu and search box. Using absolute positioning while nice for layering stuff can be a real pain if you are attempting to be responsive. Alternatively putting the search box on the other side of the screen from the list may also solve the overlap issue."
 3. https://bootstrapious.com/p/bootstrap-sidebar
 4. https://stackoverflow.com/questions/19397140/collapsing-sidebar-with-bootstrap-3
+5. https://stackoverflow.com/questions/33572599/responsive-google-maps-in-div?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa (Possible solution could be adapted from here.)
 
 
 # 2. App functionality
