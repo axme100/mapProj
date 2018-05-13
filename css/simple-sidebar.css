@@ -11,8 +11,26 @@ body {
 #map {
   min-height: 80vh;
   overflow: visible;
-
 }
+
+/*Creating the following two classes and embedding the <map> tag between <div> was this option*/
+/*https://www.ostraining.com/blog/coding/responsive-google-maps/*/
+/*https://discussions.udacity.com/t/responsive-google-map/43447*/
+/*
+.map-responsive{
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+.map-responsive iframe{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+}
+*/
 
 #wrapper {
   padding-left: 0;
@@ -58,7 +76,6 @@ body {
 
 
 /* Sidebar Styles */
-
 .sidebar-nav {
   position: absolute;
   top: 100px;
@@ -131,4 +148,11 @@ body {
     position: relative;
     margin-right: 0;
   }
+}
+
+/*Optimize layout for screens less than 620px*/
+@media only screen and (max-width: 619px) {
+
+  body {background-color: blue; }
+
 }
