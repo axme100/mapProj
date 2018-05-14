@@ -85,6 +85,7 @@ body {
   margin: 0;
   padding: 0;
   list-style: none;
+  navbar-expand-*;
 }
 
 /* The names were too long for the way the styling was originally set up, that's what it's commented out */
@@ -152,9 +153,30 @@ body {
   }
 }
 
-/*Optimize layout for screens less than 620px*/
+/*Optimize layout for screens less than 620px
 @media only screen and (max-width: 619px) {
 
   body {background-color: blue; }
 
 }
+*/
+/*@media (min-width: 1300px){
+    .navbar-expand-custom {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+    .navbar-expand-custom .navbar-nav {
+        flex-direction: row;
+    }
+    .navbar-expand-custom .navbar-nav .nav-link {
+        padding-right: .5rem;
+        padding-left: .5rem;
+    }
+    .navbar-expand-custom .navbar-collapse {
+        display: flex!important;
+    }
+    .navbar-expand-custom .navbar-toggler {
+        display: none;
+    }
+}/*
