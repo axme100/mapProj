@@ -26,6 +26,11 @@ This is a similar discussion post I could use but there are no answers: (https:/
 7. https://stackoverflow.com/questions/19827605/change-bootstrap-navbar-collapse-breakpoint-without-using-less/36289507#36289507
 
 
+8. https://www.w3schools.com/bootstrap/bootstrap_grid_system.asp
+9. https://www.w3schools.com/bootstrap/bootstrap_grid_system.asp
+10. https://github.com/irsol/neighborhood-map
+
+
 # 2. App functionality
 The list is not filtered according to the input text and nothing is displayed in place of map. The map does not diaply.
 However, it looks like I have already met all the requirements for this project, by having the drop down menu. Also, in a way, my app does filter according to the input text, but you have to press submit.
@@ -38,5 +43,7 @@ This might be a question of using the fail method accordingly.
 # 4. Update the logic of info window that whenever the another info window is opening the alreasy opened window should be closed.
 
 # 5. Check the js code quality and fix the errors and ignoe the warnings.
-Here is the location of the stlye guide. I wonder if there is a validator like there is for pep8 in Python
+Here is the location of the stlye guide:
 http://udacity.github.io/frontend-nanodegree-styleguide/javascript.html
+Also: My mentor pointed me out to the followin resourced which I used to fix the problems.
+Used: http://jshint.com/
