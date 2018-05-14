@@ -11,7 +11,7 @@ ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 		else
 			return 1;
 	});
-}
+};
 
 /* Model */
 // TODO: Add some more data from the most prestigious schools in Mexico
@@ -112,7 +112,7 @@ var initialUniversities = [
 
 	}
 
-	]
+	];
 
 // TODO: Incorporate Acronym and State Into App, that is into infowindows
 var University = function(data) {
@@ -124,7 +124,7 @@ var University = function(data) {
 	this.index = data.index;
 	this.location = data.location;
 	this.visible = ko.observable(data.visible);
-}
+};
 
 
 /* View Model */
@@ -147,7 +147,7 @@ var ViewModel = function() {
         for (var i = 0; i < this.universityList().length; i++) {
         	var theCity = self.universityList()[i].city;
         	if (myUniqueCities.indexOf(theCity) == -1) {
-        		myUniqueCities.push(theCity)
+        		myUniqueCities.push(theCity);
         	}
         }
 
@@ -160,8 +160,8 @@ var ViewModel = function() {
     this.visibleCities = ko.computed(function() {
         var visibleCities = [];
         for (var i = 0; i < this.universityList().length; i++) {
-        	if (this.universityList()[i].visible() == true) {
-        		visibleCities.push(this.universityList()[i])
+        	if (this.universityList()[i].visible() === true) {
+        		visibleCities.push(this.universityList()[i]);
         	}
         }
         return visibleCities;
@@ -183,7 +183,7 @@ var ViewModel = function() {
     // This will also be populated by the initMap function
     this.infoWindowObjects = [];
 
-}
+};
 
 /* View */
 
@@ -239,19 +239,19 @@ function initMap() {
 		google.maps.event.addListener(marker,'click', (function(marker,infowindow,url){ 
     		return function() {
         		// Prepare the marker.title for the API URL: trip white space and replace with %20
-        		sParameter = encodeURIComponent(marker.title.trim())
+        		sParameter = encodeURIComponent(marker.title.trim());
         		$.ajax({
 					type: "GET",
     				url: "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&redirects=1&titles=" + sParameter + "&callback=?",
     				dataType: "json",
     				success: function (data, textStatus, jqXHR) {
-        				var pages = data["query"]["pages"];
+        				var pages = data.query.pages;
         				var targetPage = Object.keys(pages)[0];
-     					var extract = pages[targetPage]["extract"];
+     					var extract = pages[targetPage].extract;
      					//console.log(extract);
      					var contentString = '<h3>' + marker.title + '</h3>' +
      						'<h4> <a href="' +  url + '"> Click here to see academic offering! </a> </h4>' +
-     						'<p>' + extract + '</p>'
+     						'<p>' + extract + '</p>';
             			infowindow.setContent(contentString);
 
     				},
@@ -272,18 +272,18 @@ function initMap() {
 
 	map.fitBounds(bounds);
 
-};
+}
 
 function filterList(formElement) {
 	// Loop through the view model and set the visible property to false for all of the universities
 	// that aren't the user city, otherwise set this property to 2
 	for (var i = 0; i < my.viewModel.universityList().length; i++) {
-		if (my.viewModel.universityList()[i].city != my.viewModel.userSelectedCity() && my.viewModel.userSelectedCity() != undefined) {
+		if (my.viewModel.universityList()[i].city !== my.viewModel.userSelectedCity() && my.viewModel.userSelectedCity() !== undefined) {
 			my.viewModel.universityList()[i].visible(false);
 		} else {
 			my.viewModel.universityList()[i].visible(true);
 		}
-	};
+	}
 
 	// Apply the custom user filter
 	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
@@ -291,18 +291,13 @@ function filterList(formElement) {
 	// Extend the city bounds for all of the markers pertaining to the userSelectedCity
 	var cityBounds = new google.maps.LatLngBounds();
 	for (var i = 0; i < my.viewModel.markerObjects.length; i++) {
-		console.log("1: " + my.viewModel.markerObjects[i][0] + "2: " + my.viewModel.userSelectedCity())
 		if (my.viewModel.markerObjects[i][0] == my.viewModel.userSelectedCity()) {
-			console.log("entered conditional");
-			console.log(my.viewModel.markerObjects[i][1].getPosition())
 			cityBounds.extend(my.viewModel.markerObjects[i][1].getPosition());
-		} else if (my.viewModel.userSelectedCity() == undefined) {
-			console.log("entered here22222");
-			console.log(my.viewModel.markerObjects[i][1].getPosition())
+		} else if (my.viewModel.userSelectedCity() === undefined) {
 			cityBounds.extend(my.viewModel.markerObjects[i][1].getPosition());
-		};
+		}
 
-	};
+	}
 
 
 	map.fitBounds(cityBounds);
@@ -312,7 +307,7 @@ function filterList(formElement) {
 		map.setZoom(8);
 	}
 
-};
+}
 
 function highlightUniversity(university) {
 	map.setCenter(university.location);
@@ -327,16 +322,16 @@ function highlightUniversity(university) {
         my.viewModel.markerObjects[targetMarkerIndex][1].setAnimation(null);
       }, 2000);
 
-	my.viewModel.infoWindowObjects[targetMarkerIndex].setContent("Click Me More Info")
+	my.viewModel.infoWindowObjects[targetMarkerIndex].setContent("Click Me More Info");
 
-	my.viewModel.infoWindowObjects[targetMarkerIndex].open(map, my.viewModel.markerObjects[targetMarkerIndex][1])
+	my.viewModel.infoWindowObjects[targetMarkerIndex].open(map, my.viewModel.markerObjects[targetMarkerIndex][1]);
 
-};
+}
 
 /* Run an error function in case google maps doesn't load */
 function googleError() {
 	alert("Sorry, Google Maps Could not Be Loaded, Please Check Your Internet Connection!");
-};
+}
 
 // (See above) For the makeMarkerIcon function credit is owed to the "Being Stylish" (Lesson 1, number 10 in Google Maps API Udacity Course)
 // See link: https://classroom.udacity.com/courses/ud864/lessons/8304370457/concepts/83122494470923
