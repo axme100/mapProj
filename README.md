@@ -16,27 +16,27 @@ HTML skeleton:
 
 ```
 <main>
-<div class="container-fluid">
-<div class="row">
-<div class="col-sm-4">
-<!-- Drop Down Menu Here -->
-</div>
-<div class="col-sm-8" id="map"></div>
-<!-- Map here Down Menu Here -->
-</div>
-</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-4">
+				<!-- Drop Down Menu Here -->
+			</div>
+			<div class="col-sm-8" id="map">	</div>
+			<!-- Map here Down Menu Here -->
+		</div>
+	</div>
 </main>
 ```
 
 Media Query:
-
-`@media screen and (min-width: 767px) {
+```
+@media screen and (min-width: 767px) {
 	main {
 		flex-direction: row;
 		position: relative;
 	}
-}`
-
+}
+```
 # 2. App functionality
 For the purposes of finishing this project, I decided to comment out all code having to do with the input box. According to the last code-review, I had already satisfied this requirement by including a drop down box by city. Anyway, I didn't have to comment out much code to completely take away this feature. In the future, I would like to add a live search and keep developing this project. 
 
