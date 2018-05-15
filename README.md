@@ -37,6 +37,10 @@ Media Query:
 	}
 }
 ```
+
+Testing to see that it works on a phone:
+Open this on your phone browser: `http://htmlpreview.github.io/?https://github.com/axme100/mapProj/blob/master/index.html`
+
 # 2. App functionality
 For the purposes of finishing this project, I decided to comment out all code having to do with the input box. According to the last code-review, I had already satisfied this requirement by including a drop down box by city. Anyway, I didn't have to comment out much code to completely take away this feature. In the future, I would like to add a live search and keep developing this project. 
 
