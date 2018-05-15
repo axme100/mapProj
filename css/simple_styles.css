@@ -1,0 +1,23 @@
+#map {
+  height: 95vh;
+}
+
+html, body {
+  margin: 10;
+  padding: 10;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+/* The idea for the hover functionality comes from here:
+https://stackoverflow.com/questions/20256516/highlight-list-item-in-bootstrap?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa*/
+.list-group:hover .list-group-item:hover {
+    background-color: #FFFF00;
+}
+
+@media screen and (min-width: 767px) {
+	main {
+		flex-direction: row;
+		position: relative;
+	}
+}

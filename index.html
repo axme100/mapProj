@@ -8,53 +8,45 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Simple Sidebar - Start Bootstrap Template</title>
+    <title>Mexican Postgraduate Finder</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
     <!-- Custom styles for this template -->
-    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link href="css/simple_styles.css" rel="stylesheet">
 
 </head>
 
 <body>
 
-    <div id="wrapper" class="toggled">
-
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <form data-bind="submit: filterList">
-                <input data-bind="value: userFilter" type="text"> </input>
-                <select data-bind="options: uniqueCities,
-                       optionsCaption: 'Show all cities',
-                       value: userSelectedCity,
-                       valueAllowUnset: true"></select>
-                <input type="submit"> </input>
-            </form>
-            <br>
-            <ul data-bind="foreach: visibleCities" class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <a data-bind="text: name, click: highlightUniversity"> </a>
-                </li>
-                <br>
-            </ul>
-        </div>
-        <!-- /#sidebar-wrapper -->
-
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div class="container-fluid">
-                <h1>Universidades Mexicanas</h1>
-                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Toggle Menu</a>
-                <div class="map-responsive">
-                    <div id="map"> </div>
+    <main>
+        <div class="container-fluid"> 
+            <div class="row">
+                <div class="col-sm-4">
+                    <form data-bind="submit: filterList">
+                        <!-- The form-control class is specific to bootstrap and makes prettier forms with 100% width within their container element
+                        See the following post: https://www.w3schools.com/bootstrap/bootstrap_forms.asp --> 
+                        <input data-bind="value: userFilter" type="text" class="form-control"> </input>
+                        <select class="form-control" data-bind="options: uniqueCities,
+                           optionsCaption: 'Show all cities',
+                           value: userSelectedCity,
+                           valueAllowUnset: true"></select>
+                        <input type="submit"> </input>
+                        <br>
+                        <ul data-bind="foreach: visibleCities" class="nav flex-column list-group">
+                            <li class="nav-item list-group-item">
+                                <a class="nav-link active" data-bind="text: name, click: highlightUniversity"> </a>
+                            </li>
+                        </ul>
+                    </form> 
                 </div>
-        </div>    
-        </div>
-        <!-- /#page-content-wrapper -->
-    </div>
-    <!-- /#wrapper -->
+                <div class="col-sm-8" id="map"></div>
+                    <!-- This is where the map goes you can see that it's here just by the id of the div --> 
+                </div>
+            </div>
+        </div> 
+    </main>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -73,6 +65,8 @@
 
     <!--Load application -->
     <script src="js/app.js"></script>
+
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <!-- This key is domain specific so it doesn't matter if it's public -->
     <!-- See post: https://stackoverflow.com/questions/1364858/what-steps-should-i-take-to-protect-my-google-maps-api-key?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa -->
