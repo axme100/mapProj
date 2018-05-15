@@ -128,7 +128,6 @@ var University = function(data) {
 
 
 /* View Model */
-
 var ViewModel = function() {
 	var self = this;
 
@@ -238,6 +237,11 @@ function initMap() {
 		// Since users will not click on every marker
 		google.maps.event.addListener(marker,'click', (function(marker,infowindow,url){ 
     		return function() {
+        		// If there are any infoWindows that are up and running, close them
+        		for (var i = 0; i < my.viewModel.infoWindowObjects.length; i++) {
+        			my.viewModel.infoWindowObjects[i].close();
+        		}
+
         		// Prepare the marker.title for the API URL: trip white space and replace with %20
         		sParameter = encodeURIComponent(marker.title.trim());
         		$.ajax({
