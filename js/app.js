@@ -4,7 +4,7 @@
 // TODO: Ignore accent marks because a lot of people won't be able to type them
 // TODO: Consider reworking the custom filter exentsion
 
-/* This feature has been temporarily disabled for the sake of passing the Udacity Front End Project
+/** This feature has been temporarily disabled for the sake of passing the Udacity Front End Project
 ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	this.sort(function(obj1) {
 		if (obj1.name == customFilter || obj1.name.indexOf(customFilter) != -1)
@@ -17,7 +17,7 @@ ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 };
 */
 
-/* Model */
+/** Model */
 // TODO: Add some more data from the most prestigious schools in Mexico
 var initialUniversities = [
 	{
@@ -131,7 +131,7 @@ var University = function(data) {
 };
 
 
-/* View Model */
+/** View Model */
 var ViewModel = function() {
 	var self = this;
 
@@ -188,7 +188,7 @@ var ViewModel = function() {
 
 };
 
-/* View */
+/** View */
 
 function initMap() {
     // Constructor creates a new map
@@ -345,7 +345,7 @@ function highlightUniversity(university) {
 
 }
 
-/* Run an error function in case google maps doesn't load */
+/** Run an error function in case google maps doesn't load */
 function googleError() {
 	alert("Sorry, Google Maps Could not Be Loaded, Please Check Your Internet Connection!");
 }
@@ -363,7 +363,7 @@ var markerImage = new google.maps.MarkerImage(
 	return markerImage;
 }
 
-/* Apply Bindings */
+/** Apply Bindings */
 // I'm creating an instance of my view model called "my" 
 // The idea for this comes from the following post on the next line:
 // https://stackoverflow.com/questions/46943988/how-can-i-access-an-observable-outside-the-viewmodel-in-knockoutjs?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa

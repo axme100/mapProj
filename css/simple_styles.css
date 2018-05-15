@@ -15,6 +15,7 @@ https://stackoverflow.com/questions/20256516/highlight-list-item-in-bootstrap?ut
     background-color: #FFFF00;
 }
 
+/* Credit for this media query goes to*/
 @media screen and (min-width: 767px) {
 	main {
 		flex-direction: row;
