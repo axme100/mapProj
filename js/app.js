@@ -2,6 +2,9 @@
 // Credit owed to this blog: https://www.strathweb.com/2012/07/knockout-js-pro-tips-working-with-observable-arrays/
 // TODO: Ignore caps when doing the sorting
 // TODO: Ignore accent marks because a lot of people won't be able to type them
+// TODO: Consider reworking the custom filter exentsion
+
+/* This feature has been temporarily disabled for the sake of passing the Udacity Front End Project
 ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 	this.sort(function(obj1) {
 		if (obj1.name == customFilter || obj1.name.indexOf(customFilter) != -1)
@@ -12,6 +15,7 @@ ko.observableArray.fn.sortByCustomFilter = function(customFilter) {
 			return 1;
 	});
 };
+*/
 
 /* Model */
 // TODO: Add some more data from the most prestigious schools in Mexico
@@ -295,7 +299,8 @@ function filterList(formElement) {
 	}
 
 	// Apply the custom user filter
-	my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
+	// This feature has been temporarily disabled
+	// my.viewModel.universityList.sortByCustomFilter(my.viewModel.userFilter());
 
 	// Extend the city bounds for all of the markers pertaining to the userSelectedCity
 	var cityBounds = new google.maps.LatLngBounds();
@@ -333,6 +338,9 @@ function highlightUniversity(university) {
 
 	my.viewModel.infoWindowObjects[targetMarkerIndex].setContent("Click Me More Info");
 
+	for (var i = 0; i < my.viewModel.infoWindowObjects.length; i++) {
+        			my.viewModel.infoWindowObjects[i].close();
+        		}
 	my.viewModel.infoWindowObjects[targetMarkerIndex].open(map, my.viewModel.markerObjects[targetMarkerIndex][1]);
 
 }
