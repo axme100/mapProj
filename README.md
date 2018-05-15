@@ -14,18 +14,19 @@ Having previously used the Bootstrap Simple Side Bar template, whenever the view
 
 HTML skeleton:
 
-`<main>`
-`<div class="container-fluid">`
-`<div class="row">`
-`<div class="col-sm-4">`
-`<!-- Drop Down Menu Here -->`
-`</div>`
-`<div class="col-sm-8" id="map"></div>`
+```
+<main>
+<div class="container-fluid">
+<div class="row">
+<div class="col-sm-4">
+<!-- Drop Down Menu Here -->
+</div>
+<div class="col-sm-8" id="map"></div>
 <!-- Map here Down Menu Here -->
-`</div>`
-`</div>` 
-`</main>`
-
+</div>
+</div>
+</main>
+```
 
 Media Query:
 
