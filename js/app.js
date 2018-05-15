@@ -255,7 +255,12 @@ function initMap() {
             			infowindow.setContent(contentString);
 
     				},
-    				error: function (errorMessage) {
+    				error: function () {
+    					// If the wikipedia information is not loaded correctly make sure the contentWindow reflects taht information as well!
+    					var contentString = '<h3>' + marker.title + '</h3>' +
+     						'<h4> <a href="' +  url + '"> Click here to see academic offering! </a> </h4>' +
+     						'<p>' + "Wikipedia extract not loaded correctly, please check internet connection" + '</p>';
+            			infowindow.setContent(contentString);
     				}
 				});
         		infowindow.open(map,marker);
