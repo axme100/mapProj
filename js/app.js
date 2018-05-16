@@ -305,19 +305,26 @@ function filterList(formElement) {
 	// Extend the city bounds for all of the markers pertaining to the userSelectedCity
 	var cityBounds = new google.maps.LatLngBounds();
 	for (var i = 0; i < my.viewModel.markerObjects.length; i++) {
+		// If the marker is part of the user selected City add it to the city bounds
+		// But also make it visible
 		if (my.viewModel.markerObjects[i][0] == my.viewModel.userSelectedCity()) {
+			my.viewModel.markerObjects[i][1].setVisible(true);
 			cityBounds.extend(my.viewModel.markerObjects[i][1].getPosition());
-		} else if (my.viewModel.userSelectedCity() === undefined) {
+		// If the marker is not part of the userSelectedCity then make it false
+		} else if (my.viewModel.markerObjects[i][0] !== my.viewModel.userSelectedCity() && my.viewModel.userSelectedCity() !== undefined) {
+			my.viewModel.markerObjects[i][1].setVisible(false);
+		// In the case that the user has selected all the cities
+		} else {
+			my.viewModel.markerObjects[i][1].setVisible(true);
 			cityBounds.extend(my.viewModel.markerObjects[i][1].getPosition());
 		}
 
 	}
 
-
 	map.fitBounds(cityBounds);
 
 	// In case there is only one point in this city, we don't want to be too zoomed in.
-	if (my.viewModel.userSelectedCity() == "Ciudad Juárez" || my.viewModel.userSelectedCity() == "Chetumal" || my.viewModel.userSelectedCity() == "Puebla") {
+	if (my.viewModel.userSelectedCity() == "Ciudad Juárez" || my.viewModel.userSelectedCity() == "Chetumal" || my.viewModel.userSelectedCity() == "Puebla" || my.viewModel.userSelectedCity() == "Guadalajara") {
 		map.setZoom(8);
 	}
 
